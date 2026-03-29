@@ -5,7 +5,7 @@ const db = require('../config/db');
 // Get all admins
 router.get('/', async (req, res) => {
     try {
-        const [admins] = await db.query('SELECT id, name, email, role, phone, employee_code, branch_name, status, created_at FROM users');
+        const [admins] = await db.query('SELECT id, name, email, role, phone, employee_code, branch_name, status, created_at FROM railway.users');
         res.json(admins);
     } catch (error) {
         console.error('Error fetching admins:', error);
@@ -22,7 +22,7 @@ router.post('/', async (req, res) => {
 
     try {
         const [result] = await db.query(
-            'INSERT INTO users (name, email, password_hash, role, phone, employee_code, branch_name, verification_code, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+            'INSERT INTO railway.users (name, email, password_hash, role, phone, employee_code, branch_name, verification_code, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
             [name, email, password, role || 'admin', phone, employeeCode, branchName, verificationCode, 'pending']
         );
 
@@ -53,13 +53,13 @@ router.post('/verify', async (req, res) => {
     const { email, code } = req.body;
 
     try {
-        const [users] = await db.query('SELECT * FROM users WHERE email = ? AND verification_code = ?', [email, code]);
+        const [users] = await db.query('SELECT * FROM railway.users WHERE email = ? AND verification_code = ?', [email, code]);
 
         if (users.length === 0) {
             return res.status(400).json({ message: 'Invalid verification code' });
         }
 
-        await db.query('UPDATE users SET status = "active", verification_code = NULL WHERE email = ?', [email]);
+        await db.query('UPDATE railway.users SET status = "active", verification_code = NULL WHERE email = ?', [email]);
 
         res.json({ message: 'Account verified and enabled successfully' });
     } catch (error) {
@@ -78,7 +78,7 @@ router.delete('/:id', async (req, res) => {
             return res.status(403).json({ message: 'The primary superadmin cannot be deleted.' });
         }
 
-        const [result] = await db.query('DELETE FROM users WHERE id = ?', [id]);
+        const [result] = await db.query('DELETE FROM railway.users WHERE id = ?', [id]);
 
         if (result.affectedRows === 0) {
             return res.status(404).json({ message: 'Admin not found' });
