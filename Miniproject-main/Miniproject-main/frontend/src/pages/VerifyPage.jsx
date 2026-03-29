@@ -81,7 +81,7 @@ export default function VerifyPage() {
                 if (user && user.role === 'superadmin') {
                     // Redirect to Admin Portal with session data
                     const sessionData = btoa(JSON.stringify(user));
-                    window.location.href = `http://localhost:5174/dashboard?session=${sessionData}`;
+                    window.location.href = `window.location.href = 'https://admin-frontend-production-f82e.up.railway.app/dashboard';`;
                 } else if (user && user.role === 'admin') {
                     // Navigate to internal dashboard
                     navigate('/dashboard');
