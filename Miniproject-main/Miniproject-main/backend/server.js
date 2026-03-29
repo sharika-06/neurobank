@@ -74,14 +74,14 @@ app.post('/api/auth/login', async (req, res) => {
                 console.log('[DEBUG] Inserting into Login_user with:', logParams);
 
                 await db.query(`
-                    INSERT INTO miniproject_main.Login_user 
+                    INSERT INTO Login_user 
                     (user_name, mail_id, employee_code, role, login_time) 
                     VALUES (?, ?, ?, ?, NOW())
                 `, logParams);
 
                 // ALSO record in Audit_Logs for the new page
                 await db.query(`
-                    INSERT INTO miniproject_main.Audit_Logs (user_email, action, details)
+                    INSERT INTO Audit_Logs (user_email, action, details)
                     VALUES (?, ?, ?)
                 `, [user.email, 'Login', `User logged in from ${req.headers['user-agent']}`]);
 
