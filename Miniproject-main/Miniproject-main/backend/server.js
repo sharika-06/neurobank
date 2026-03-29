@@ -61,7 +61,7 @@ app.post('/api/auth/login', async (req, res) => {
 
     try {
         // Authenticate using admin_portal database
-        const [rows] = await db.query('SELECT * FROM admin_portal.users WHERE email = ? AND password_hash = ? AND status = "active"', [mailId, password]);
+        const [rows] = await db.query('SELECT * FROM railway.users WHERE email = ? AND password_hash = ? AND status = "active"', [mailId, password]);
         console.log('[DEBUG] Auth Query Result (rows.length):', rows.length);
 
         if (rows.length > 0) {
