@@ -5,8 +5,8 @@ const db = require('../config/db');
 // Get dashboard stats
 router.get('/stats', async (req, res) => {
     try {
-        const [[{ totalUsers }]] = await db.query('SELECT COUNT(*) as totalUsers FROM users');
-        const [[{ activeAdmins }]] = await db.query('SELECT COUNT(*) as activeAdmins FROM users WHERE status = "active"');
+        const [[{ totalUsers }]] = await db.query('SELECT COUNT(*) as totalUsers FROM railway.users');
+        const [[{ activeAdmins }]] = await db.query('SELECT COUNT(*) as activeAdmins FROM railway.users WHERE status = "active"');
 
         res.json({
             totalUsers,
@@ -22,7 +22,7 @@ router.get('/stats', async (req, res) => {
 // Get recent activity (Simulated from existing data for now)
 router.get('/activity', async (req, res) => {
     try {
-        const [users] = await db.query('SELECT name, role, created_at FROM users ORDER BY created_at DESC LIMIT 5');
+        const [users] = await db.query('SELECT name, role, created_at FROM railway.users ORDER BY created_at DESC LIMIT 5');
         const activities = users.map(u => ({
             id: Math.random().toString(36).substr(2, 9),
             type: 'USER_REGISTRATION',
